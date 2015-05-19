@@ -1,12 +1,12 @@
 1. BIND config file
-================
+-----------------------
 За конфигурационен файл използваме "named.conf.local", тъй като основния "named.conf" може
 ( и най-вероятно ще бъде) презаписан при update на BIND. Според Васил Колев, операционната 
 система те пита дали искаш да ти презапише файла, но все пак е добре да се ползва named.conf.local
 като safety measure. 
 
-/etc/bind/named.conf.local
------------------------
+#### /etc/bind/named.conf.local
+``` bash
 	// isp.initlab.org е зоната, която ни е делегирана от Васил Колев
 	// Също така в DNS-а на initlab.org има настроени GLUE записи, 
 	// които връщат "А" записи за [ns1|ns2].isp.initlab.org
@@ -25,14 +25,16 @@
 	        type master;
 	        file "/etc/bind/2.1.10.in-addr.arpa";
 	};
+```
 -----------------------
 
 
 2. BIND options file
-==============
+----------
 
-/etc/bind/named.conf.options
+####/etc/bind/named.conf.options
 -----------------------
+```bash
 	options {
         directory "/var/cache/bind";
 
@@ -58,16 +60,18 @@
 	# знаейки версията можеш да пробваш конкретен exploit за нея
         version "alpha";
 	};
+```
 -----------------------
 
 
 3. Зонови файлове за  isp.initlab.org и 10.1.2.0/24 
-==============
+-----------------------
 Важно е да имаме настроен достатъчно нисък TTL, така че ако по някаква причина
 се наложи промяна на някой запис, това да стане възможно най-бързо
 
-/etc/bind/isp.initlab.org :
+#### /etc/bind/isp.initlab.org
 -----------------------
+```bash
 	$ORIGIN .
 	$TTL 300       ; 5 minuti
 	isp.initlab.org         IN SOA  ns1.isp.initlab.org root.isp.initlab.org. (
@@ -85,12 +89,14 @@
 	$TTL 300
 	NS1     A       94.26.8.55
 	NS2     A       188.166.63.31
+```
 -----------------------
 
 
-Зонов файл за обратни записи на 10.1.2.0/24
-/etc/bind/2.1.10.in-addr.arpa  
+#### Зонов файл за обратни записи на 10.1.2.0/24
+#### /etc/bind/2.1.10.in-addr.arpa  
 -----------------------
+```bash
 	;
 	; BIND reverse data file for broadcast zone
 	;
@@ -107,5 +113,6 @@
 	2.1.10.in-addr.arpa.    IN      NS      ns2.isp.initlab.org.
 	
 	1.2.1.10        PTR     alpha.
+```
 -----------------------
 
